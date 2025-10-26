@@ -2,7 +2,7 @@
 
 stay tuned...
 
-# Befehlssatz
+## Befehlssatz
 
 Der Befehlssatz des Microtronic 2090 ist sehr durchdacht. Trotzdem habe ich das eine oder andere Mal bestimmte Operationen im Befehlssatz vermisst, mit dem sich eine gegebene Programmieraufgabe hätte schneller/eleganter/sparsamer lösen lassen. Zum Beispiel wären weitere bedingte Sprünge (_BRNC_, _BRNZ_, ...) sehr angenehm. Aaaber...
 
@@ -14,4 +14,26 @@ In diesem Zusammenhang wäre es übrigens historisch interessant, warum der - di
 
 
 Auf _HALT_ (F00) hingegen hätte ich verzichten können - ein "ewiger" Sprung auf die eigene Adresse erfüllt den gleichen Zweck und lässt bei Programmende zudem die Displayanzeige intakt. Ebenso ist der Befehl _NOP_ (F01) nicht wirklich nötig, da etwa _MOV 0,0_ (000) neben vielen anderen redundanten Operationen den gleichen Zweck erfüllt - und auch optisch eher wie ein "leerer" Befehl aussieht.
+
+
+## Ausführungsgeschwindigkeit 
+
+Wie üblich aus reiner Neugier, aber ein bisschen auch von der Notwendigkeit getrieben begann ich darüber nachzudenken, wie schnell (oder langsam) der Microtronic einzelne Befehle ausführt. Michael hat dazu ja bereits Untersuchungen durchgeführt und eine Größenordnung von 40-120 Hips festgestellt. 
+
+Da mir mehrere 2090 zu Verfügung stehen, habe ich mich zu einer Testreihe entschlossen:
+
+- Gibt es (deutlich) messbare Unterschiede zwischen einzelnen 2090?
+- Gibt es einen Unterschied zwischen ADD und SUB?
+- Gibt es einen Unterschied zwischen SHR und SHL?
+- Gibt es einen Unterschied zwischen SHL und ADD x,x?
+- Wie schnell werden Registerbänke getauscht (EXRL, EXRM, EXRA)? Gibt es Unterschiede?
+- Wie schnell werden DIN und DOT durchgeführt? 
+- Welche Befehle sind "teuer", welche "billiger"?
+
+Als Testanordnung dient im wesentlichen ein Programm, dass den jeweiligen Befehl ausreichend häufig (250 mal) hintereinander ausführt. Zu Beginn und am Ende des Tests wird ein akustisches Signal ausgelöst. Die Zeit zwischen den Signalen wird gemessen (mit Android phyphox) und durch die Anzahl der Ausführungen geteilt - dadurch erhalten wir einen relativ genauen Wert für die Geschwindigkeit der Ausführung eines einzelnen Befehls. 
+
+Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entrissen und dankenswerterweise veröffentlicht wurde, kann man natürlich auch dort nachsehen, wie einzelne Befehle implementiert sind. Das wäre dann allerdings etwas, das ich mutmaßlich erst im nächsten Leben angehen würde. 
+
+
+
 
