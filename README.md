@@ -37,10 +37,12 @@ Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entri
 
 SHL d und ADD d,d
 
-- SHL 20,248 ms
-- ADD 20,372 ms
-- MOVI 20,336 ms
-- 
+- SHL d     20,248 ms
+- ADD d,d   20,372 ms
+- MOVI 1    20,336 ms
+- SHR d     20,296 ms
+- ADDI 1    20,328 ms
+- SUBI 1
 
   
 
