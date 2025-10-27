@@ -14,6 +14,7 @@ In diesem Zusammenhang wäre es übrigens historisch interessant, warum der - im
 
 Auf _HALT_ (F00) hingegen hätte ich verzichten können - ein "ewiger" Sprung auf die eigene Adresse erfüllt den gleichen Zweck und lässt bei Programmende zudem die Displayanzeige intakt. Ebenso ist der Befehl _NOP_ (F01) nicht wirklich nötig, da etwa _MOV 0,0_ (000) neben vielen anderen redundanten Operationen den gleichen Zweck erfüllt - und auch optisch eher wie ein "leerer" Befehl aussieht.
 
+Wie mir erst sehr kürzlich klar wurde, ist auch der _SHL_-Befehl eigentlich redundant. Eine bitweise binäre Verschiebung nach links ist ja eine Multiplikation mit 2, also eine Verdopplung. Das kann man natürlich auch durch Addition "mit sich selbst" erreichen. Es wäre interessant, in der Firmware nachzusehen, ob _SHL_ separat implementiert wurde - übersteigt aber meine Fähigkeiten. Im folgenden werde ich stattdessen einen Geschwindigkeitsvergleich zwischen _SHL d_ und _ADD d,d_ anstellen - dessen Ergebnis dann ein starkes Indiz für die eine oder andere Variante liefert.
 
 ## Ausführungsgeschwindigkeit 
 
@@ -24,7 +25,7 @@ Da mir mehrere 2090 zu Verfügung stehen, habe ich mich zu einer Testreihe entsc
 - Gibt es (deutlich) messbare Unterschiede zwischen einzelnen 2090?
 - Gibt es einen Unterschied zwischen ADD und SUB?
 - Gibt es einen Unterschied zwischen SHR und SHL?
-- Gibt es einen Unterschied zwischen SHL und ADD x,x?
+- Gibt es einen Unterschied zwischen SHL d und ADD d,d?
 - Wie schnell werden Registerbänke getauscht (EXRL, EXRM, EXRA)? Gibt es Unterschiede?
 - Wie schnell werden DIN und DOT durchgeführt? 
 - Welche Befehle sind "teuer", welche "billiger"?
