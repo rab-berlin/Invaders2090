@@ -34,6 +34,13 @@ Als Testanordnung dient im wesentlichen ein Programm, dass den jeweiligen Befehl
 
 Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entrissen und dankenswerterweise veröffentlicht wurde, kann man natürlich auch dort nachsehen, wie einzelne Befehle implementiert sind. Das wäre dann allerdings etwas, das ich mutmaßlich erst im nächsten Leben angehen würde. 
 
+SHL d und ADD d,d
+
+- SHL 20,248 ms
+- ADD 20,372 ms
+
+  
+
 
 
 
