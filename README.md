@@ -27,7 +27,8 @@ Da mir mehrere 2090 zu Verfügung stehen, habe ich mich zu einer Testreihe entsc
 - Gibt es einen Unterschied zwischen SHR und SHL?
 - Gibt es einen Unterschied zwischen SHL d und ADD d,d?
 - Wie schnell werden Registerbänke getauscht (EXRL, EXRM, EXRA)? Gibt es Unterschiede?
-- Wie schnell werden DIN und DOT durchgeführt? 
+- Wie schnell werden DIN und DOT durchgeführt?
+- Wie schnell werden unbedingte und bedingte Sprünge ausgeführt?
 - Welche Befehle sind "teuer", welche "billiger"?
 
 Als Testanordnung dient im wesentlichen ein Programm, dass den jeweiligen Befehl ausreichend häufig (250 mal) hintereinander ausführt. Zu Beginn und am Ende des Tests wird ein akustisches Signal ausgelöst. Die Zeit zwischen den Signalen wird gemessen (mit Android phyphox) und durch die Anzahl der Ausführungen geteilt - dadurch erhalten wir einen relativ genauen Wert für die Geschwindigkeit der Ausführung eines einzelnen Befehls. 
