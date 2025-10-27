@@ -38,6 +38,8 @@ SHL d und ADD d,d
 
 - SHL 20,248 ms
 - ADD 20,372 ms
+- MOVI 20,336 ms
+- 
 
   
 
