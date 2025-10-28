@@ -26,6 +26,7 @@ Da mir mehrere 2090 zu Verfügung stehen, habe ich mich zu einer Testreihe entsc
 - Gibt es einen Unterschied zwischen ADD und SUB?
 - Gibt es einen Unterschied zwischen SHR und SHL?
 - Gibt es einen Unterschied zwischen SHL d und ADD d,d?
+- zwischen NOP und MOV d,d
 - Wie schnell werden Registerbänke getauscht (EXRL, EXRM, EXRA)? Gibt es Unterschiede?
 - Wie schnell werden DIN und DOT durchgeführt?
 - Wie schnell werden unbedingte und bedingte Sprünge ausgeführt?
@@ -43,6 +44,11 @@ SHL d und ADD d,d
 - SHR d     20,296 ms
 - ADDI 1    20,328 ms
 - SUBI 1
+- DOT 20,288 ms
+- DIN 19,888 ms
+- EXRA 21,960 ms
+- EXRL 20,692 ms
+- EXRM 20,780 ms
 
   
 
