@@ -31,12 +31,11 @@ Da mir mehrere 2090 zu Verfügung stehen, habe ich mich zu einer Testreihe entsc
 - Wie schnell werden DIN und DOT durchgeführt?
 - Wie schnell werden unbedingte und bedingte Sprünge ausgeführt?
 - Welche Befehle sind "teuer", welche "billiger"?
+- Erkennt der Microtronic redundante Befehle? MOV 0,0 vs. MOV 0,1? ADDI 0,d vs. ADDI 1,d?
 
 Als Testanordnung dient im wesentlichen ein Programm, dass den jeweiligen Befehl ausreichend häufig (250 mal) hintereinander ausführt. Zu Beginn und am Ende des Tests wird ein akustisches Signal ausgelöst. Die Zeit zwischen den Signalen wird gemessen (mit Android phyphox) und durch die Anzahl der Ausführungen geteilt - dadurch erhalten wir einen relativ genauen Wert für die Geschwindigkeit der Ausführung eines einzelnen Befehls. 
 
-Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entrissen und dankenswerterweise veröffentlicht wurde, kann man natürlich auch dort nachsehen, wie einzelne Befehle implementiert sind. Das wäre dann allerdings etwas, das ich mutmaßlich erst im nächsten Leben angehen würde. 
-
-SHL d und ADD d,d
+Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entrissen und dankenswerterweise veröffentlicht wurde, kann man natürlich auch dort nachsehen, wie einzelne Befehle implementiert sind. Das wäre dann allerdings etwas, das ich erst im nächsten Leben angehen würde. 
 
 - SHL d     20,248 ms
 - ADD d,d   20,372 ms
@@ -49,6 +48,10 @@ SHL d und ADD d,d
 - EXRA 21,960 ms
 - EXRL 20,692 ms
 - EXRM 20,780 ms
+- NOP 20,444 ms
+- MOV d,d 20,364 ms
+
+Der _NOP_-Befehl, der ja angeblich nix macht (außer den Programmzähler zu inkrementieren)... dieser Befehl ist einer der "teuersten". Das überrascht dann doch :-)
 
   
 
