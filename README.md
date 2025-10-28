@@ -38,24 +38,25 @@ Als Testanordnung dient im wesentlichen ein Programm, dass den jeweiligen Befehl
 Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entrissen und dankenswerterweise veröffentlicht wurde, kann man natürlich auch dort nachsehen, wie einzelne Befehle implementiert sind. Das wäre dann allerdings etwas, das ich erst im nächsten Leben angehen würde. 
 
 ```
-- SHL d     20,248 ms
-- ADD d,d   20,372 ms
-- MOVI 1    20,336 ms
-- SHR d     20,296 ms
-- ADDI 1    20,328 ms
-- SUBI 1
-- DOT       20,288 ms
-- DIN       19,888 ms
-- EXRA      21,960 ms
-- EXRL      20,692 ms
-- EXRM      20,780 ms
-- NOP       20,444 ms
-- MOV d,d   20,364 ms
-- GOTO      20,040 ms
-- BRZ       19,980 ms
+- SHL d        20,248 ms
+- ADD d,d      20,372 ms
+- MOVI 1,d     20,336 ms
+- SHR d        20,296 ms
+- ADDI 1,d     20,328 ms
+- SUBI 1,d
+- DOT s        20,288 ms
+- DIN d        19,888 ms
+- EXRA         21,960 ms
+- EXRL         20,692 ms
+- EXRM         20,780 ms
+- NOP          20,444 ms
+- MOV d,d      20,364 ms
+- GOTO aa      20,040 ms
+- BRZ aa       19,980 ms
 ```
 
-Der _NOP_-Befehl, der ja angeblich nix macht (außer den Programmzähler zu inkrementieren)... dieser Befehl ist einer der "teuersten". Das überrascht dann doch :-)
+- Der _NOP_-Befehl, der ja angeblich nix macht (außer den Programmzähler zu inkrementieren)... dieser Befehl ist einer der "teuersten". Das überrascht dann doch :-)
+- Ein bedingter Sprung _BRZ_ wird schneller ausgeführt als ein unbedingter Sprung _GOTO_. Auch unerwartet.
 
   
 
