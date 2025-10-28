@@ -37,6 +37,7 @@ Als Testanordnung dient im wesentlichen ein Programm, dass den jeweiligen Befehl
 
 Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entrissen und dankenswerterweise veröffentlicht wurde, kann man natürlich auch dort nachsehen, wie einzelne Befehle implementiert sind. Das wäre dann allerdings etwas, das ich erst im nächsten Leben angehen würde. 
 
+´´´
 - SHL d     20,248 ms
 - ADD d,d   20,372 ms
 - MOVI 1    20,336 ms
@@ -52,6 +53,7 @@ Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entri
 - MOV d,d 20,364 ms
 - GOTO 20,040 ms
 - BRZ 19,980 ms
+´´´
 
 Der _NOP_-Befehl, der ja angeblich nix macht (außer den Programmzähler zu inkrementieren)... dieser Befehl ist einer der "teuersten". Das überrascht dann doch :-)
 
