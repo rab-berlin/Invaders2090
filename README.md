@@ -32,6 +32,7 @@ Da mir mehrere 2090 zu Verfügung stehen, habe ich mich zu einer Testreihe entsc
 - Wie schnell werden unbedingte und bedingte Sprünge ausgeführt?
 - Welche Befehle sind "teuer", welche "billiger"?
 - Erkennt der Microtronic redundante Befehle? MOV 0,0 vs. MOV 0,1? ADDI 0,d vs. ADDI 1,d?
+- Was löscht ein Register schneller: MOVI 0,d oder SUB d,d?
 
 Als Testanordnung dient im wesentlichen ein Programm, dass den jeweiligen Befehl ausreichend häufig (250 mal) hintereinander ausführt. Zu Beginn und am Ende des Tests wird ein akustisches Signal ausgelöst. Die Zeit zwischen den Signalen wird gemessen (mit Android phyphox) und durch die Anzahl der Ausführungen geteilt - dadurch erhalten wir einen relativ genauen Wert für die Geschwindigkeit der Ausführung eines einzelnen Befehls. 
 
