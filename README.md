@@ -56,6 +56,11 @@ Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entri
 - BRC aa       20,200 ms
 - BRZ aa       19,980 ms
 - CALL aa      20,068 ms
+- CLEAR        20,784 ms
+- STC          20,416 ms
+- RSC          20,232 ms
+- RND          20,568 ms
+- TIME         20,776 ms
 ```
 
 - Der _NOP_-Befehl, der ja angeblich nix macht (außer den Programmzähler zu inkrementieren)... dieser Befehl ist einer der "teuersten". Das überrascht dann doch :-)
