@@ -44,7 +44,9 @@ Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entri
 - MOVI 1,d     20,336 ms
 - SHR d        20,296 ms
 - ADDI 1,d     20,328 ms
-- SUBI 1,d
+- ADDI F,d
+- SUBI 1,d     20,296 ms
+- SUBI F,d
 - DOT s        20,288 ms
 - DIN d        19,888 ms
 - EXRA         21,960 ms
@@ -61,6 +63,8 @@ Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entri
 - RSC          20,232 ms
 - RND          20,568 ms
 - TIME         20,776 ms
+- CMP s,d      20,108 ms
+- CMPI n,d     20,006 ms      
 ```
 
 - Der _NOP_-Befehl, der ja angeblich nix macht (außer den Programmzähler zu inkrementieren)... dieser Befehl ist einer der "teuersten". Das überrascht dann doch :-)
