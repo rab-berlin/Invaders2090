@@ -70,7 +70,7 @@ Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entri
 - Der _NOP_-Befehl, der ja angeblich nix macht (außer den Programmzähler zu inkrementieren)... dieser Befehl ist einer der "teuersten". Das überrascht dann doch :-)
 - Ein bedingter Sprung _BRZ_ wird schneller ausgeführt als ein unbedingter Sprung _GOTO_. Auch unerwartet.
 
-# Let's do the time warp 
+## Let's do the time warp 
 
 Ein Microcontroller kann nicht nichts tun. Sobald und solange Strom anliegt, arbeitet der TMS1600 sein im ROM hinterlegtes Programm ab. Jede Instruktion des TMS (nicht des Microtronic!) benötigt 6 Takte zur Ausführung. 
 
