@@ -85,6 +85,8 @@ Jetzt aber ein bisschen Mathematik...
 
 Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb der Dauer eines Befehls 20 ms / 8,8758 μs = **2.253 TMS-Instruktionen** ausgeführt. Wenn man bedenkt, dass das ganze Microtronic-ROM nur 4 kB groß ist... wird entweder tatsächlich immer das halbe ROM abgearbeitet (unwahrscheinlich) oder hauptsächlich irgendwo in Schleifen gewartet (wahrscheinlich).
 
+Display, Tastatur, Uhrzeit
+
 
 
 
