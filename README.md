@@ -79,11 +79,11 @@ Anders als beworben und angegeben, arbeitet der Microtronic nicht mit 500 kHz, s
 Jetzt aber ein bisschen Mathematik...
 
 ```
-1 Takt:                   1 / 676.000 Hz = 0,0000014793 s = 1,4793 ns
-1 TMS-Instruktion:        6 x Takt = 8,8758 ns
+1 Takt:                   1 / 676.000 Hz = 0,0000014793 s = 1,4793 μs
+1 TMS-Instruktion:        6 x Takt = 8,8758 μs
 ```
 
-Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb der Dauer eines Befehls 20 ms / 8,8758 ns = etwa **2.253 TMS-Instruktionen** ausgeführt. Wenn man bedenkt, dass das ganze Microtronic-ROM nur 4 kB groß ist... wird entweder tatsächlich immer das halbe ROM abgearbeitet (unwahrscheinlich) oder hauptsächlich irgendwo in Schleifen gewartet.
+Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb der Dauer eines Befehls 20 ms / 8,8758 μs = **2.253 TMS-Instruktionen** ausgeführt. Wenn man bedenkt, dass das ganze Microtronic-ROM nur 4 kB groß ist... wird entweder tatsächlich immer das halbe ROM abgearbeitet (unwahrscheinlich) oder hauptsächlich irgendwo in Schleifen gewartet.
 
 
 
