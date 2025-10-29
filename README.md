@@ -76,12 +76,14 @@ Ein Microcontroller kann nicht nichts tun. Sobald und solange Strom anliegt, arb
 
 Anders als beworben und angegeben, arbeitet der Microtronic nicht mit 500 kHz, sondern mit einem Systemtakt von 676 kHz. TI in Freising war in die Entwicklung des 2090 eingebunden und ging offenbar sehr taktvoll mit dieser Übertaktung um, also dürfen wir annehmen, dass uns der TMS1600 nicht im Betrieb wegschmilzt. Da die ältesten Microtronics schon seit über 40 Jahren noch immer ihren Dienst tun, ist diese Vermutung auch hinreichend gestützt. 
 
-Jetzt aber ein bisschen Mathematik
+Jetzt aber ein bisschen Mathematik...
 
+```
 1 Takt:                   1 / 676.000 Hz = 0,0000014793 s = 1,4793 ns
 1 TMS-Instruktion:        6 x Takt = 8,8758 ns
+```
 
-Ein Microtronic-Befehl dauert wie gemessen ca. 20 ms, also werden innerhalb der daher eines Befehls 20 ms / 8,8758 ns = etwa 2.253 Instruktionen ausgeführt. Wenn man bedenkt, dass das ganze Microtronic-ROM nur etwa 4 kB groß ist...
+Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb der Dauer eines Befehls 20 ms / 8,8758 ns = etwa **2.253 TMS-Instruktionen** ausgeführt. Wenn man bedenkt, dass das ganze Microtronic-ROM nur 4 kB groß ist... wird entweder tatsächlich immer das halbe ROM abgearbeitet (unwahrscheinlich) oder hauptsächlich irgendwo in Schleifen gewartet.
 
 
 
