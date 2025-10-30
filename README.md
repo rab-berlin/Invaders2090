@@ -89,9 +89,20 @@ Daher ein bisschen Mathematik...
 
 Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb der Dauer eines Befehls ~20 ms / 8,8758 μs = ~**2.253 TMS-Instruktionen** ausgeführt. Wenn man bedenkt, dass das ganze Microtronic-ROM nur 4 kB groß ist... wird entweder tatsächlich immer das halbe ROM abgearbeitet oder hauptsächlich irgendwo in Schleifen gewartet. Oder irgendwas zwischendrin. 
 
-In diesen Zusammenhang gehört auch der Systemtakt selbst. Der 
+In jedem Fall aber werden (vermutlich mindestens einmal pro Befehlszyklus)
 
-Display, Tastatur, Uhrzeit
+- die Anzeige aktualisiert
+- die Tastatur abgefragt
+- die Uhrzeit weitergezählt
+
+Die Vermutung, dass diese Aufgaben mit jedem Befehl, also etwa alle 20 ms abgearbeitet werden, wird durch das Experiment "Computer zählt Frequenzen" (Band 2, S. 62) untermauert. Die Grenzfrequenz des Microtronic soll laut Beschreibung zwischen 30 und 50 Hz liegen. Wenn wir z.B. eine Grenzfrequenz von 50 Hz festgestellt haben und jeder Befehl bekanntlich 20 ms beansprucht, dann ergibt sich 
+
+50 Hz * 20 ms = 50 * 0,02 = 1
+
+Der Eingang 4 für die Weiterzählung der Sekunden würde in diesem Beispiel also alle 20 ms eingelesen.
+
+Der TMS1600 hat keine Interrupts, daher müssen diese Aufgaben ausreichend häufig und regelmäßig erledigt werden. Ein erheblicher Teil der 2253 Instruktionen pro Befehl dürfte daher auf diese Tätigkeiten entfallen. Wenn das Display mit _DISOUT_ F02 ausgeschaltet wird, beschleunigt sich die Ausführung der Microtronic-Befehle fast um den Faktor 3. Wäre es zu kühn, zu behaupten, dass zwei Drittel der ca. 2250 Instruktionen pro Befehl eigentlich der Anzeige dienen?
+
 
 
 
