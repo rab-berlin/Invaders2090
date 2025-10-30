@@ -72,18 +72,24 @@ Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entri
 
 ## Let's do the time warp 
 
-Ein Microcontroller kann nicht nichts tun. Sobald und solange Strom anliegt, arbeitet der TMS1600 sein im ROM hinterlegtes Programm ab. Jede Instruktion des TMS (nicht des Microtronic!) benötigt 6 Takte zur Ausführung. 
+Der Systemtakt des Microcontrollers wird durch eine Kondensator-Widerstand-Kombination bestimmt. Während TI in den Datenblättern des TMS eine maximale Taktfrequenz von 500 kHz - durch Kondensator pF und Widerstand kOhm - auflistet, kommt beim Microtronic eine Kombination ... zum Einsatz, und damit rechnerisch 670 kHz. 
 
-Anders als beworben und angegeben, arbeitet der Microtronic nicht mit 500 kHz, sondern mit einem Systemtakt von 676 kHz. TI in Freising war in die Entwicklung des 2090 eingebunden und ging offenbar sehr taktvoll mit dieser Übertaktung um, also dürfen wir annehmen, dass uns der TMS1600 nicht im Betrieb wegschmilzt. Da die ältesten Microtronics schon seit über 40 Jahren und noch immer ihren Dienst tun, ist diese Vermutung auch hinreichend gestützt. 
+Anders als beworben und angegeben, arbeitet der Microtronic also nicht mit 500 kHz, sondern mit einem Systemtakt von 676 kHz. TI in Freising war in die Entwicklung des 2090 eingebunden und ging offenbar sehr _taktvoll_ mit dieser Übertaktung um, also dürfen wir annehmen, dass uns der TMS1600 nicht im Betrieb wegschmilzt. Da die ältesten Microtronics schon seit über 40 Jahren und noch immer ihren Dienst tun, ist diese Vermutung auch hinreichend gestützt. 
 
-Jetzt aber ein bisschen Mathematik...
+Da kein präziser Quarz zur Takterzeugung eingesetzt wird, dürften (bedingt durch Toleranzen von Kondensator und Widerstand) zwischen einzelnen Exemplaren des 2090 auch Unterschiede hinsichtlich tatsächlicher Taktfrequenz und damit Ausführungsgeschwindigkeit einzelner Befehle bestehen.
+
+Ein Microcontroller kann nicht nichts tun. Sobald Strom anliegt, beginnt der TMS1600, sein im ROM hinterlegtes Programm abzuarbeiten. Jede Instruktion des TMS (nicht des Microtronic!) benötigt 6 Takte zur Ausführung. 
+
+Daher ein bisschen Mathematik...
 
 ```
 1 Takt:                   1 / 676.000 Hz = 0,0000014793 s = 1,4793 μs
 1 TMS-Instruktion:        6 x Takt = 8,8758 μs
 ```
 
-Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb der Dauer eines Befehls 20 ms / 8,8758 μs = **2.253 TMS-Instruktionen** ausgeführt. Wenn man bedenkt, dass das ganze Microtronic-ROM nur 4 kB groß ist... wird entweder tatsächlich immer das halbe ROM abgearbeitet (unwahrscheinlich) oder hauptsächlich irgendwo in Schleifen gewartet (wahrscheinlich).
+Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb der Dauer eines Befehls ~20 ms / 8,8758 μs = ~**2.253 TMS-Instruktionen** ausgeführt. Wenn man bedenkt, dass das ganze Microtronic-ROM nur 4 kB groß ist... wird entweder tatsächlich immer das halbe ROM abgearbeitet oder hauptsächlich irgendwo in Schleifen gewartet. Oder irgendwas zwischendrin. 
+
+In diesen Zusammenhang gehört auch der Systemtakt selbst. Der 
 
 Display, Tastatur, Uhrzeit
 
