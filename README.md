@@ -38,6 +38,10 @@ Als Testanordnung dient im wesentlichen ein Programm, dass den jeweiligen Befehl
 
 Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entrissen und dankenswerterweise veröffentlicht wurde, kann man natürlich auch dort nachsehen, wie einzelne Befehle implementiert sind. Das wäre dann allerdings etwas, das ich erst im nächsten Leben angehen würde. 
 
+Stattdessen hab ich gemessen:
+
+## Ergebnisse
+
 ```
 - SHL d        20,248 ms
 - ADD d,d      20,372 ms
@@ -67,14 +71,13 @@ Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entri
 - CMPI n,d     20,006 ms      
 ```
 
-- Der _NOP_-Befehl, der ja angeblich nix macht (außer den Programmzähler zu inkrementieren)... dieser Befehl ist einer der "teuersten". Das überrascht dann doch :-)
-- Ein bedingter Sprung _BRZ_ wird schneller ausgeführt als ein unbedingter Sprung _GOTO_. Auch unerwartet.
+Zunächst war ich enttäuscht, denn ich hatte deutlichere Unterschiede bei der Ausführungsdauer einzelner Microtronic-Befehle erwartet. Im Prinzip könnte man sich jetzt zurücklehnen und sagen, naja, jeder Befehl braucht plusminus 20 Millisekunden. Tatsächlich kommt es aber sehr auf **die kleinen Unterschiede hinter dem Komma** an.
 
 ## Let's do the time warp 
 
-Der Systemtakt des Microcontrollers wird durch eine Kondensator-Widerstand-Kombination bestimmt. Während TI in den Datenblättern des TMS eine maximale Taktfrequenz von 500 kHz - durch Kondensator pF und Widerstand kOhm - auflistet, kommt beim Microtronic eine Kombination ... zum Einsatz, und damit rechnerisch 670 kHz. 
+Anders als beworben und angegeben, arbeitet der Microtronic nicht mit einem Systemtakt von 500 kHz, sondern deutlich schneller. Der interne Oszillator des Microcontrollers wird durch eine Kondensator-Widerstand-Kombination angeregt. Während TI in den Datenblättern des TMS eine maximale Taktfrequenz von 500 kHz - durch Kondensator 47 pF und Widerstand 22 kOhm - auflistet, kommt beim Microtronic eine Kombination ... zum Einsatz, und damit rechnerisch 670 kHz. Gemessen wurden sogar 676 kHz, was beeindruckende 35% über der Spezifikation liegt.
 
-Anders als beworben und angegeben, arbeitet der Microtronic also nicht mit 500 kHz, sondern mit einem Systemtakt von 676 kHz. TI in Freising war in die Entwicklung des 2090 eingebunden und ging offenbar sehr _taktvoll_ mit dieser Übertaktung um, also dürfen wir annehmen, dass uns der TMS1600 nicht im Betrieb wegschmilzt. Da die ältesten Microtronics schon seit über 40 Jahren und noch immer ihren Dienst tun, ist diese Vermutung auch hinreichend gestützt. 
+TI in Freising war in die Entwicklung des 2090 eingebunden und ging offenbar sehr _taktvoll_ mit dieser Übertaktung um, also dürfen wir annehmen, dass uns der TMS1600 nicht im Betrieb wegschmilzt. Da die ältesten Microtronics schon seit über 40 Jahren und noch immer ihren Dienst tun, ist diese Vermutung auch hinreichend gestützt. 
 
 Da kein präziser Quarz zur Takterzeugung eingesetzt wird, dürften (bedingt durch Toleranzen von Kondensator und Widerstand) zwischen einzelnen Exemplaren des 2090 auch Unterschiede hinsichtlich tatsächlicher Taktfrequenz und damit Ausführungsgeschwindigkeit einzelner Befehle bestehen.
 
@@ -89,19 +92,27 @@ Daher ein bisschen Mathematik...
 
 Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb der Dauer eines Befehls ~20 ms / 8,8758 μs = ~**2.253 TMS-Instruktionen** ausgeführt. Wenn man bedenkt, dass das ganze Microtronic-ROM nur 4 kB groß ist... wird entweder tatsächlich immer das halbe ROM abgearbeitet oder hauptsächlich irgendwo in Schleifen gewartet. Oder irgendwas zwischendrin. 
 
+## Routineaufgaben
+
 In jedem Fall aber werden (vermutlich mindestens einmal pro Befehlszyklus)
 
 - die Anzeige aktualisiert
 - die Tastatur abgefragt
 - die Uhrzeit weitergezählt
 
-Die Vermutung, dass diese Aufgaben mit jedem Befehl, also etwa alle 20 ms abgearbeitet werden, wird durch das Experiment "Computer zählt Frequenzen" (Band 2, S. 62) untermauert. Die Grenzfrequenz des Microtronic soll laut Beschreibung zwischen 30 und 50 Hz liegen. Wenn wir z.B. eine Grenzfrequenz von 50 Hz festgestellt haben und jeder Befehl bekanntlich 20 ms beansprucht, dann ergibt sich 
+Die Vermutung, dass diese Aufgaben mit jedem Befehl, also etwa alle 20 ms abgearbeitet werden, wird durch das Experiment "Computer zählt Frequenzen" (Band 2, S. 62) untermauert. Die Grenzfrequenz des Microtronic soll laut Beschreibung zwischen 30 und 50 Hz liegen. Wenn wir z.B. eine Grenzfrequenz von 50 Hz messen und jeder Befehl bekanntlich 20 ms beansprucht, dann ergibt sich 
 
 50 Hz * 20 ms = 50 * 0,02 = 1
 
-Der Eingang 4 für die Weiterzählung der Sekunden würde in diesem Beispiel also alle 20 ms eingelesen.
+Wenn die Impulse am Eingang 4 mit 50 Hz, also alle 20 ms eintreffen, dann kann der Microtronic diese (gerade noch) verlustfrei einlesen - weil das Betriebssystem im ROM genau eine Abfrage der Eingänge pro Befehlsausführung vorsieht. 
 
 Der TMS1600 hat keine Interrupts, daher müssen diese Aufgaben ausreichend häufig und regelmäßig erledigt werden. Ein erheblicher Teil der 2253 Instruktionen pro Befehl dürfte daher auf diese Tätigkeiten entfallen. Wenn das Display mit _DISOUT_ F02 ausgeschaltet wird, beschleunigt sich die Ausführung der Microtronic-Befehle fast um den Faktor 3. Wäre es zu kühn, zu behaupten, dass zwei Drittel der ca. 2250 Instruktionen pro Befehl eigentlich der Anzeige dienen?
+
+## Auffällig
+
+- Der _NOP_-Befehl, der ja angeblich nix macht (außer den Programmzähler zu inkrementieren)... dieser Befehl ist einer der "teuersten". Das überrascht dann doch :-)
+- Ein bedingter Sprung _BRZ_ wird schneller ausgeführt als ein unbedingter Sprung _GOTO_. Auch unerwartet.
+
 
 
 
