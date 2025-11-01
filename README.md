@@ -94,13 +94,13 @@ Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb 
 
 ## Routineaufgaben
 
-In jedem Fall aber werden (vermutlich mindestens einmal pro Befehlszyklus)
+In jedem Fall muss bei Programmausführung zunächst einmal der Befehl aus dem externen RAM gelesen werden. Das dauert eine gewisse Weile (ca. 6 ms). Dann werden (vermutlich mindestens einmal pro Befehlszyklus)
 
 - die Anzeige aktualisiert
 - die Tastatur abgefragt
 - die Uhrzeit weitergezählt
 
-Die Vermutung, dass diese Aufgaben mit jedem Befehl, also etwa alle 20 ms abgearbeitet werden, wird durch das Experiment "Computer zählt Frequenzen" (Band 2, S. 62) untermauert. Die Grenzfrequenz des Microtronic soll laut Beschreibung zwischen 30 und 50 Hz liegen. Wenn wir z.B. eine Grenzfrequenz von 50 Hz messen und jeder Befehl bekanntlich 20 ms beansprucht, dann ergibt sich 
+Die Vermutung, dass zumindest die Uhrzeit mit jedem Befehl, also etwa alle 20 ms, aktualisiert wird, wird durch das Experiment "Computer zählt Frequenzen" (Band 2, S. 62) untermauert. Die Grenzfrequenz des Microtronic soll laut Beschreibung zwischen 30 und 50 Hz liegen. Wenn wir z.B. eine Grenzfrequenz von 50 Hz messen und jeder Befehl bekanntlich 20 ms beansprucht, dann ergibt sich 
 
 50 Hz * 20 ms = 50 * 0,02 = 1
 
