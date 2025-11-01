@@ -94,17 +94,18 @@ Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb 
 
 ## Routineaufgaben
 
-In jedem Fall muss bei Programmausführung zunächst einmal der Befehl aus dem externen RAM gelesen werden. Das dauert eine gewisse Weile (ca. 6 ms). Dann werden (vermutlich mindestens einmal pro Befehlszyklus)
+Ein Betriebssystem hat eine Menge zu tun. Es ist ein bisschen traurig, aber die eigentliche Ausführung von Befehlen eines Benutzerprogramms nimmt eher einen geringeren Teil der Gesamtlaufzeit in Anspruch. Der Rest ist - wie im richtigen Leben - mal wieder Verwaltung. Zu diesen regelmäßigen Verwaltungsaufgaben gehören u.a.
 
-- die Anzeige aktualisiert
-- die Tastatur abgefragt
-- die Uhrzeit weitergezählt
+- Auslesen des nächsten Befehls (vom externen RAM)
+- Aktualiserung der Anzeige
+- Abfrage der Tastatur 
+- Weiterzählen der Uhrzeit
 
 Die Vermutung, dass zumindest die Uhrzeit mit jedem Befehl, also etwa alle 20 ms, aktualisiert wird, wird durch das Experiment "Computer zählt Frequenzen" (Band 2, S. 62) untermauert. Die Grenzfrequenz des Microtronic soll laut Beschreibung zwischen 30 und 50 Hz liegen. Wenn wir z.B. eine Grenzfrequenz von 50 Hz messen und jeder Befehl bekanntlich 20 ms beansprucht, dann ergibt sich 
 
 50 Hz * 20 ms = 50 * 0,02 = 1
 
-Wenn die Impulse am Eingang 4 mit 50 Hz, also alle 20 ms eintreffen, dann kann der Microtronic diese (gerade noch) verlustfrei einlesen - weil das Betriebssystem im ROM genau eine Abfrage der Eingänge pro Befehlsausführung vorsieht. 
+Impulse, die alle 20 ms eintreffen (50 Hz), registriert der Microtronic gerade noch verlustfrei - also sieht das Betriebssystem genau eine Abfrage der Eingänge pro Befehlsausführung vor. Treffen die Impulse schneller ein, kommt der Microtronic aus dem Takt.
 
 Der TMS1600 hat keine Interrupts, daher müssen diese Aufgaben ausreichend häufig und regelmäßig erledigt werden. Ein erheblicher Teil der 2253 Instruktionen pro Befehl dürfte daher auf diese Tätigkeiten entfallen. Wenn das Display mit _DISOUT_ F02 ausgeschaltet wird, beschleunigt sich die Ausführung der Microtronic-Befehle fast um den Faktor 3. Wäre es zu kühn, zu behaupten, dass zwei Drittel der ca. 2250 Instruktionen pro Befehl eigentlich der Anzeige dienen?
 
