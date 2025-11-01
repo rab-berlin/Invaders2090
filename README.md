@@ -75,9 +75,9 @@ Zunächst war ich enttäuscht, denn ich hatte deutlichere Unterschiede bei der A
 
 ## Let's do the time warp 
 
-Anders als beworben und angegeben, arbeitet der Microtronic nicht mit einem Systemtakt von 500 kHz, sondern deutlich schneller. Der interne Oszillator des Microcontrollers wird durch eine Kondensator-Widerstand-Kombination angeregt. Während TI in den Datenblättern des TMS eine maximale Taktfrequenz von 500 kHz - durch Kondensator 47 pF und Widerstand 22 kOhm - auflistet, kommt beim Microtronic eine Kombination ... zum Einsatz, und damit rechnerisch 670 kHz. Gemessen wurden sogar 676 kHz, was beeindruckende 35% über der Spezifikation liegt.
+Anders als beworben und angegeben, arbeitet der Microtronic übrigens nicht mit einem Systemtakt von 500 kHz, sondern deutlich schneller. Der interne Oszillator des Microcontrollers wird durch eine Kondensator-Widerstand-Kombination angeregt. Während TI in den Datenblättern für den TMS1600 eine maximale Taktfrequenz von 550 kHz angibt, kommt beim Microtronic eine Kombination 56 pF und 22 kOhm zum Einsatz, womit sich eine gemessene Taktfrequenz von 676 kHz ergibt, was beeindruckende 20% über der Spezifikation liegt.
 
-TI in Freising war in die Entwicklung des 2090 eingebunden und ging offenbar sehr _taktvoll_ mit dieser Übertaktung um, also dürfen wir annehmen, dass uns der TMS1600 nicht im Betrieb wegschmilzt. Da die ältesten Microtronics schon seit über 40 Jahren und noch immer ihren Dienst tun, ist diese Vermutung auch hinreichend gestützt. 
+TI in Freising war in die Entwicklung des 2090 eingebunden und ging offenbar sehr _taktvoll_ mit dieser Übertaktung um, also dürfen wir annehmen, dass der TMS1600 nicht im Betrieb wegschmilzt. Da die ältesten Microtronicse schon seit über 40 Jahren und noch immer brav ihren Dienst verrichten, ist diese Vermutung auch hinreichend gestützt. Trotzdem fragt man sich natürlich, warum nicht nach dem Prinzip _"Mehr ist besser"_ statt 500 kHz dann lieber 600 oder sogar 650 kHz auf Prospekte und Verkaufsverpackung gedruckt wurde.
 
 Da kein präziser Quarz zur Takterzeugung eingesetzt wird, dürften (bedingt durch Toleranzen von Kondensator und Widerstand) zwischen einzelnen Exemplaren des 2090 auch Unterschiede hinsichtlich tatsächlicher Taktfrequenz und damit Ausführungsgeschwindigkeit einzelner Befehle bestehen.
 
@@ -94,7 +94,7 @@ Ein **Microtronic-Befehl** dauert wie gemessen ca. 20 ms, also werden innerhalb 
 
 ## Routineaufgaben
 
-Ein Betriebssystem hat eine Menge zu tun. Es ist ein bisschen traurig, aber die eigentliche Ausführung von Befehlen eines Benutzerprogramms nimmt eher einen geringeren Teil der Gesamtlaufzeit in Anspruch. Der Rest ist - wie im richtigen Leben - mal wieder Verwaltung. Zu diesen regelmäßigen Verwaltungsaufgaben gehören u.a.
+Ein Betriebssystem hat eine Menge zu tun. Es ist ein bisschen traurig, aber die eigentliche Ausführung von Befehlen eines Benutzerprogramms nimmt eher einen geringeren Teil der Gesamtlaufzeit in Anspruch. Der Rest ist - wie im richtigen Leben - wieder Verwaltung. Zu diesen regelmäßigen Verwaltungsaufgaben gehören u.a.
 
 - Auslesen des nächsten Befehls (vom externen RAM)
 - Aktualiserung der Anzeige
