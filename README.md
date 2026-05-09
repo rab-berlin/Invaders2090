@@ -38,6 +38,26 @@ Als Testanordnung dient im wesentlichen ein Programm, dass den jeweiligen Befehl
 
 Da inzwischen die komplette Firmware des Microtronic dem TMS1600 mühevoll entrissen und dankenswerterweise veröffentlicht wurde, kann man natürlich auch dort nachsehen, wie einzelne Befehle implementiert sind. Das wäre dann allerdings etwas, das ich erst im nächsten Leben angehen würde. 
 
+### Anzeigemodus
+
+Der Microtronic 2090 hat im Prinzip drei verschiedene Anzeigemodi:
+
+- das Display zeigt mit zwei Leuchtziffern den Programmzähler und mit drei Leuchtziffern die jeweilige Instruktion: 00 000. Das ist die Standardeinstellung für die Programmausführung.
+- das Display zeigt Registerinhalte mit bis zu sechs Stellen (F1x - F6x).
+- das Display ist abgeschaltet (F02).
+
+Je nach Anzeigemodus (also Display-Inhalt) werden einzelne Instruktionen unterschiedlich schnell ausgeführt. Am schnellsten geht es, wenn das Display gar nicht angesteuert werden muss, am langsamsten natürlich, wenn alle sechs Stellen des Displays ständig aktualisiert werden müssen. Und dieser Unterschied ist durchaus beträchtlich: Ohne Displayausgabe erhöht sich die Verarbeitungsgeschwindigkeit von Befehlen gegenüber einer sechsstelligen Anzeige um nahezu den Faktor drei.
+
+
+
+
+
+
+
+
+
+
+
 Stattdessen hab ich gemessen:
 
 ## Ergebnisse
