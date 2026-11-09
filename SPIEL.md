@@ -1,7 +1,7 @@
 # Space Invaders – das Spiel
 
-- 256 Programmschritte, alle belegt
-- Datei: [invaders.mic](invaders.mic) (Version 35)
+- 254 Programmschritte, 2 frei
+- Datei: [invaders.mic](invaders.mic) (Version 36)
 - Benötigt die 8x8-LED-Matrix und drei Taster.
 
 ## Spiel
@@ -36,13 +36,20 @@ RESET (alle Register 0, das Programm enthält kein CLEAR), Matrix einschalten, `
 
 ## Matrixprotokoll
 
-Das Programm verwendet das **frühere Blockprotokoll** der Matrix: Bereit-Signal auf Eingang 1, Startnibble 1, 16 Werte, Endnibble 0. Die Matrix bleibt die ganze Zeit eingeschaltet, und Eingang 1 wird beim Lesen der Taster ausgeblendet.
+Das Programm arbeitet mit dem [ESP2090 Studio](https://github.com/rab-berlin/ESP2090) im Blockmodus:
 
-Im [Emulator2090](https://github.com/rab-berlin/Emulator2090) die Matrix mit `m` auf `alt` stellen. Für das aktuelle Protokoll des [ESP2090 Studios](https://github.com/rab-berlin/ESP2090) muss das Programm noch umgestellt werden.
+1. Es wartet auf die Anfrage des ESP (REQ auf Eingang 1).
+2. Es antwortet mit ACK 1.
+3. Nach genau einem Befehl (EXRL) folgen die 16 Bildregister.
+4. Zum Schluss setzt es die Ausgänge auf 0.
+
+Eingang 1 wird beim Lesen der Taster ausgeblendet. Auf der Weboberfläche des ESP2090 Studios „LED on“ drücken, im [Emulator2090](https://github.com/rab-berlin/Emulator2090) die Matrix mit `m` einschalten (Modus ESP).
+
+Version 35 lief noch mit dem früheren Blockprotokoll (Startnibble 1, Endnibble 0). Version 36 ist durch die neue Bildausgabe 2 Schritte kürzer.
 
 ## Stellschrauben
 
 Beide kosten keinen zusätzlichen Schritt:
 
-- **Adresse 6B, `SUBI #4,ZUFALL`:** wie schnell die Bomben fallen. Eine kleinere Zahl ergibt ein gemütlicheres Spiel.
-- **Adresse A3, `CMPI #1,ZUFALL`:** wie oft die Aliens pendeln. Eine größere Zahl macht sie zappeliger.
+- **Adresse 69, `SUBI #4,ZUFALL`:** wie schnell die Bomben fallen. Eine kleinere Zahl ergibt ein gemütlicheres Spiel.
+- **Adresse A1, `CMPI #1,ZUFALL`:** wie oft die Aliens pendeln. Eine größere Zahl macht sie zappeliger.
