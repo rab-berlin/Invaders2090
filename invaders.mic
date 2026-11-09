@@ -1,0 +1,271 @@
+; invaders-35.mic - Space Invaders fuer Busch Microtronic 2090 mit 8x8-LED-Matrix und 3 Tastern
+; 256 Schritte (00-FF), frei: 0
+; Start: Reset (alle Register 0, das Programm enthaelt kein CLEAR), Matrix einschalten, RUN.
+; Taster: Eingang 2 = links, Eingang 3 = Feuer, Eingang 4 = rechts (Emulator: Pfeiltasten).
+;   Eingang 1 ist das Bereit-Signal der Matrix. Taster halten, bis das Schiff reagiert.
+; Spielende (Bombe trifft das Schiff): Punkte dezimal in der Anzeige. Neues Spiel: Reset.
+; Erzeugt aus dem Listing von invaders-35.xml (Adresse, Code, Label, Mnemonik, Kommentar).
+;
+; #define (Register)
+;   SCHIFF1 r0  SCHIFF2 r1  Schiff links/rechts (Zeile 1)
+;   Z11-Z42 r0-r7  Zeile 1-4; im EXRL-Fenster Zeile 5-8
+;   ALIENS r8  LAGE r9  RAKETE_Y rA  RAKETE_L rB  RAKETE_R rC   (Kontext Rakete)
+;   PUNKTE_L r8  PUNKTE_H r9  BOMBE_Y rA  BOMBE_L rB  BOMBE_R rC  (Kontext Bombe, nach EXRM)
+;   TREFFER/ZUFALL/TEST rD  HILF rE  FENSTER/EINGABE rF
+
+F02   ; 00  Beginn     DISOUT           Display aus: Befehle 9,3 ms (Frame-Takt der Matrix), schon fürs Schiff
+180   ; 01             MOVI #8,SCHIFF1  Schiff Spalte 4-6
+131   ; 02             MOVI #3,SCHIFF2
+F0D   ; 03  Füllen     EXRL             Fenster auf: R0-R7 = Aliens (leer), Schiff und Rest sind in M0-M7 geparkt
+156   ; 04             MOVI #5,Z41      Aliens verteilen (Zeile 8)
+157   ; 05             MOVI #5,Z42
+1A4   ; 06             MOVI #A,Z31
+125   ; 07             MOVI #2,Z32
+152   ; 08             MOVI #5,Z21
+153   ; 09             MOVI #5,Z22
+F0D   ; 0A             EXRL             Aliens nach M0-M7 (Zeile 6-8), Schiff, Rakete und Bombe sind zurück
+1B8   ; 0B             MOVI #B,ALIENS   11 Aliens (Zeile 6-8)
+379   ; 0C             ANDI #7,LAGE     Startlage (Bit 4 = 0), die Punkte in Bit 1-3 bleiben
+FDF   ; 0D  Start      DIN EINGABE
+3EF   ; 0E             ANDI #E,EINGABE  Eingang 1 (Bereit-Signal der Matrix) ausblenden
+E35   ; 0F             BRZ Anzeige      keine Taste
+0FD   ; 10             MOV EINGABE,TEST zuerst Feuer: Eingang 3
+34D   ; 11             ANDI #4,TEST
+E22   ; 12             BRZ Dir          kein Feuer
+90A   ; 13  FireB      CMPI #0,RAKETE_Y Rakete schon unterwegs?
+D22   ; 14             BRC Dir
+00B   ; 15             MOV SCHIFF1,RAKETE_L Mitte des sichtbaren Schiffs (vor dem Zug) = linkes Ende + 1:
+01C   ; 16             MOV SCHIFF2,RAKETE_R
+FAC   ; 17             SHL RAKETE_R     Schiff um 1 nach rechts
+FAB   ; 18             SHL RAKETE_L
+FBC   ; 19             ADC RAKETE_R
+F8B   ; 1A             INV RAKETE_L     und nicht
+F8C   ; 1B             INV RAKETE_R
+20B   ; 1C             AND SCHIFF1,RAKETE_L = linkes Ende des Schiffs
+21C   ; 1D             AND SCHIFF2,RAKETE_R
+FAC   ; 1E             SHL RAKETE_R     ein Feld nach rechts = Mitte
+FAB   ; 1F             SHL RAKETE_L
+FBC   ; 20             ADC RAKETE_R
+11A   ; 21             MOVI #1,RAKETE_Y Rakete startet in Zeile 1 (im Schiff, nicht gezeichnet)
+3AF   ; 22  Dir        ANDI #A,EINGABE  Richtung: Eingang 4 (8) = rechts, Eingang 2 (2) = links
+98F   ; 23             CMPI #8,EINGABE  nur rechts
+E28   ; 24             BRZ RechtsB
+92F   ; 25             CMPI #2,EINGABE  nur links
+E2E   ; 26             BRZ LinksB
+C35   ; 27             GOTO Anzeige     keine Richtung oder beide: Schiff bleibt stehen
+971   ; 28  RechtsB    CMPI #7,SCHIFF2  Schiff steht rechts am Rand?
+D35   ; 29             BRC Anzeige
+FA1   ; 2A             SHL SCHIFF2      Schiff ein Feld nach rechts
+FA0   ; 2B             SHL SCHIFF1
+FB1   ; 2C             ADC SCHIFF2
+C35   ; 2D             GOTO Anzeige
+970   ; 2E  LinksB     CMPI #7,SCHIFF1  Schiff steht links am Rand (Spalte 1-3)?
+E35   ; 2F             BRZ Anzeige      ja: kein Zug
+F90   ; 30             SHR SCHIFF1      Schiff ein Feld nach links
+F91   ; 31             SHR SCHIFF2
+D34   ; 32             BRC Plus8        Carry (Spalte 5) nach SCHIFF1 Bit 4
+C35   ; 33             GOTO Anzeige
+580   ; 34  Plus8      ADDI #8,SCHIFF1
+FDD   ; 35  Anzeige    DIN TEST         auf Bereit-Signal (Eingang 1) warten
+31D   ; 36             ANDI #1,TEST
+E35   ; 37             BRZ Anzeige
+FED   ; 38             DOT TEST         Startnibble 1
+F0F   ; 39             EXRA             Fenster: Aliens nach R8-RF, Variablen nach M0-M7
+F0D   ; 3A             EXRL
+F0F   ; 3B             EXRA
+FE0   ; 3C             DOT Z11
+FE1   ; 3D             DOT Z12
+FE2   ; 3E             DOT Z21
+FE3   ; 3F             DOT Z22
+FE4   ; 40             DOT Z31
+FE5   ; 41             DOT Z32
+FE6   ; 42             DOT Z41
+FE7   ; 43             DOT Z42
+FE8   ; 44             DOT Z51
+FE9   ; 45             DOT Z52
+FEA   ; 46             DOT Z61
+FEB   ; 47             DOT Z62
+FEC   ; 48             DOT Z71
+FED   ; 49             DOT Z72
+FEE   ; 4A             DOT Z81
+FEF   ; 4B             DOT Z82
+F0F   ; 4C             EXRA             Fenster zu
+F0D   ; 4D             EXRL
+F0F   ; 4E             EXRA
+10D   ; 4F             MOVI #0,TEST     Endnibble 0
+FED   ; 50             DOT TEST
+90A   ; 51  Rakete     CMPI #0,RAKETE_Y
+E67   ; 52             BRZ Bombe        keine Rakete
+91A   ; 53             CMPI #1,RAKETE_Y
+E56   ; 54             BRZ NeuR         Zeile 1 ist nicht gezeichnet
+BCB   ; 55             CALL Toggle      Rakete aus der alten Zeile löschen (XOR)
+51A   ; 56  NeuR       ADDI #1,RAKETE_Y eine Zeile höher
+98A   ; 57             CMPI #8,RAKETE_Y
+D66   ; 58             BRC Oben8        Zeile 9: oben raus
+BCB   ; 59             CALL Toggle      neue Zeile: setzt die Rakete oder löscht das getroffene Ziel
+E67   ; 5A             BRZ Bombe        kein Treffer (Toggle liefert das Zero-Flag)
+95A   ; 5B  Hit        CMPI #5,RAKETE_Y
+D5F   ; 5C             BRC AlienHit     Zeile 6-8: Alien getroffen
+F0E   ; 5D             EXRM             Zeile 2-5: Bombe getroffen, beide weg
+C75   ; 5E             GOTO Kolli
+0AD   ; 5F  AlienHit   MOV RAKETE_Y,TEST Zeilenpunkte: Zeile 6 = 1, 7 = 2, 8 = 3
+75D   ; 60             SUBI #5,TEST
+F7D   ; 61             MAS TEST         über M13 in den Kontext Bombe: nach EXRM steht der Wert in TEST
+F0E   ; 62             EXRM             Kontext Bombe: dort liegen die Punkte (r8, r9)
+BC5   ; 63             CALL Punkt       kommt im Kontext Rakete zurück, Rakete ist weg
+718   ; 64             SUBI #1,ALIENS   Ziel ist schon gelöscht, die Rakete wird nicht gesetzt
+E03   ; 65             BRZ Füllen       alle Aliens weg: neue Aliens, Schiff und Bombe bleiben
+10A   ; 66  Oben8      MOVI #0,RAKETE_Y Rakete weg
+F0E   ; 67  Bombe      EXRM             rA/rB/rC = Bombe, Toggle arbeitet auf rA/rB/rC
+90A   ; 68             CMPI #0,BOMBE_Y
+E7A   ; 69             BRZ BombeNeu     keine Bombe
+F05   ; 6A             RND              fällt die Bombe in diesem Tick? Chance (5 + Stufe)/16, ab Stufe 11 immer
+74D   ; 6B             SUBI #4,ZUFALL   Würfel 0-3: fällt (Startwert der Kurve: SUBI #k ergibt (k + 1 + Stufe)/16)
+D6F   ; 6C             BRC Fallen
+89D   ; 6D             CMP PUNKTE_H,ZUFALL Carry = Stufe < Würfel - 4: bleibt diesen Tick stehen
+D9F   ; 6E             BRC BombeEnde
+BCB   ; 6F  Fallen     CALL Toggle      Bombe aus der alten Zeile löschen
+71A   ; 70             SUBI #1,BOMBE_Y  eine Zeile tiefer
+91A   ; 71             CMPI #1,BOMBE_Y
+E8F   ; 72             BRZ BombeUnten   Zeile 1: Schiff prüfen
+BCB   ; 73             CALL Toggle      neue Zeile: setzt die Bombe oder löscht die getroffene Rakete
+E9F   ; 74             BRZ BombeEnde
+16D   ; 75  Kolli      MOVI #6,TEST     Bombe und Rakete getroffen: 6 - Zeile Punkte (Zeile 5 = 1 ... Zeile 2 = 4), beide weg
+6AD   ; 76             SUB BOMBE_Y,TEST BOMBE_Y ist hier immer die Zeile des Zusammenstoßes
+10A   ; 77             MOVI #0,BOMBE_Y
+BC5   ; 78             CALL Punkt       kommt im Kontext Rakete zurück, Rakete ist weg
+CA0   ; 79             GOTO Aliens
+F05   ; 7A  BombeNeu   RND              neue Bombe? Stufe = PUNKTE_H (wächst alle 16 Punkte), Schwelle = 2 * Stufe
+09E   ; 7B             MOV PUNKTE_H,HILF Chance (2 * Stufe + 1)/16: Stufe 0: 1/16, 1: 3/16 ... 7: 15/16, ab Stufe 8 immer
+FAE   ; 7C             SHL HILF
+D80   ; 7D             BRC BombeStart   Überlauf: Stufe >= 8 (ab 128 Punkten), immer eine neue Bombe
+8ED   ; 7E             CMP HILF,ZUFALL  Carry = Schwelle < Würfel: keine Bombe
+D9F   ; 7F             BRC BombeEnde
+15A   ; 80  BombeStart MOVI #5,BOMBE_Y  Bombe startet in Zeile 5 ...
+FCA   ; 81             SUBC BOMBE_Y     ... ab Stufe 8 in Zeile 4 (Carry = 1 nur über den Überlauf-Sprung)
+11B   ; 82             MOVI #1,BOMBE_L
+10C   ; 83             MOVI #0,BOMBE_R
+0FE   ; 84             MOV FENSTER,HILF Spalte 0-7 aus dem Zufall (F-Ziffer)
+37E   ; 85             ANDI #7,HILF
+71E   ; 86  SpLoop     SUBI #1,HILF
+D8C   ; 87             BRC SpEnde
+FAC   ; 88             SHL BOMBE_R
+FAB   ; 89             SHL BOMBE_L
+FBC   ; 8A             ADC BOMBE_R
+C86   ; 8B             GOTO SpLoop
+BCB   ; 8C  SpEnde     CALL Toggle      Bombe zeichnen (trifft sie dabei die Rakete: beide weg)
+E9F   ; 8D             BRZ BombeEnde
+C75   ; 8E             GOTO Kolli
+00D   ; 8F  BombeUnten MOV Z11,TREFFER  Zeile 1 = Schiff: Treffer = Schiff UND Bombe, ohne Toggle
+2BD   ; 90             AND BOMBE_L,TREFFER
+01E   ; 91             MOV Z12,HILF
+2CE   ; 92             AND BOMBE_R,HILF
+AED   ; 93             OR HILF,TREFFER
+E9E   ; 94             BRZ Miss         kein Treffer
+085   ; 95  GameOver   MOV PUNKTE_L,Z32 Spielende: Einer und Sechzehner nach R5/R6 (EXRM tauscht die nicht)
+096   ; 96             MOV PUNKTE_H,Z41
+F0E   ; 97             EXRM             Kontext Rakete: dritte Stelle steckt in LAGE
+097   ; 98             MOV LAGE,Z42     dritte Stelle nach R7
+377   ; 99             ANDI #7,Z42      Bit 4 (Alienlage) ausblenden
+F0F   ; 9A             EXRA             R5 R6 R7 -> D E F (Einer, Sechzehner, 256er)
+F03   ; 9B             HXDZ             D E F = Einer, Zehner, Hunderter
+F3D   ; 9C             DISP #3,TEST
+C9D   ; 9D  Ende       GOTO Ende        bleibt stehen (Reset für neues Spiel)
+10A   ; 9E  Miss       MOVI #0,BOMBE_Y  Bombe verfehlt das Schiff
+F0E   ; 9F  BombeEnde  EXRM             Kontext Rakete
+F05   ; A0  Aliens     RND
+95A   ; A1             CMPI #5,RAKETE_Y
+D0D   ; A2             BRC Start        Rakete in Zeile 6-8: Aliens bleiben stehen
+91D   ; A3             CMPI #1,ZUFALL
+D0D   ; A4             BRC Start        nur in 1 von 8 Ticks bewegen (Würfel 0 oder 1)
+979   ; A5  Sway       CMPI #7,LAGE     Carry = Bit 4 gesetzt: Block steht rechts
+DB2   ; A6             BRC SwayL        Block steht rechts: ein Feld nach links
+F0D   ; A7             EXRL             Block steht in Startlage: ein Feld nach rechts (Aliens in R0-R7)
+FA3   ; A8             SHL Z22
+FA2   ; A9             SHL Z21
+FB3   ; AA             ADC Z22
+FA5   ; AB             SHL Z32
+FA4   ; AC             SHL Z31
+FB5   ; AD             ADC Z32
+FA7   ; AE             SHL Z42
+FA6   ; AF             SHL Z41
+FB7   ; B0             ADC Z42
+CBC   ; B1             GOTO SwayEnde
+F0D   ; B2  SwayL      EXRL
+F92   ; B3             SHR Z21          Zeile 6 (Zeile 5 ist frei und wird nicht geschoben)
+F93   ; B4             SHR Z22
+DBF   ; B5             BRC Fix6         Übertrag Spalte 5 -> Spalte 4
+F94   ; B6  Back6      SHR Z31
+F95   ; B7             SHR Z32
+DC1   ; B8             BRC Fix7         Übertrag Spalte 5 -> Spalte 4
+F96   ; B9  Back7      SHR Z41
+F97   ; BA             SHR Z42
+DC3   ; BB             BRC Fix8         Übertrag Spalte 5 -> Spalte 4
+F0D   ; BC  SwayEnde   EXRL
+589   ; BD             ADDI #8,LAGE     Lage wechseln (nur Bit 4)
+C0D   ; BE             GOTO Start
+582   ; BF  Fix6       ADDI #8,Z21
+CB6   ; C0             GOTO Back6
+584   ; C1  Fix7       ADDI #8,Z31
+CB9   ; C2             GOTO Back7
+586   ; C3  Fix8       ADDI #8,Z41
+CBC   ; C4             GOTO SwayEnde
+4D8   ; C5  Punkt      ADD TEST,PUNKTE_L TEST Punkte: dreistellig = r8, r9 (Bombenseite) und LAGE Bit 1-3 (Raketenseite)
+FB9   ; C6             ADC PUNKTE_H
+F0E   ; C7             EXRM             Carry bleibt über EXRM erhalten
+10A   ; C8             MOVI #0,RAKETE_Y Rakete ist in beiden Fällen weg
+FB9   ; C9             ADC LAGE
+F07   ; CA             RET
+94A   ; CB  Toggle     CMPI #4,RAKETE_Y Zeile 5-8?
+DFC   ; CC             BRC TgUp
+10F   ; CD             MOVI #0,FENSTER  Zeile 1-4: Fenster bleibt zu
+92A   ; CE  TgZeile    CMPI #2,RAKETE_Y Halbierungssuche: Carry = Zeile 3/4, Zero = Zeile 2, sonst Zeile 1
+DDA   ; CF             BRC TgHi
+EEA   ; D0             BRZ TgZ2
+00D   ; D1  TgZ1       MOV Z11,TREFFER  links: Treffer = Zeile und Maske
+2BD   ; D2             AND RAKETE_L,TREFFER
+AB0   ; D3             OR RAKETE_L,Z11  XOR = (a oder m) - (a und m)
+6D0   ; D4             SUB TREFFER,Z11
+01E   ; D5             MOV Z12,HILF     rechts
+2CE   ; D6             AND RAKETE_R,HILF
+AC1   ; D7             OR RAKETE_R,Z12
+6E1   ; D8             SUB HILF,Z12
+CE4   ; D9             GOTO TgEnde
+93A   ; DA  TgHi       CMPI #3,RAKETE_Y Zeile 3 oder 4
+EF3   ; DB             BRZ TgZ3
+06D   ; DC  TgZ4       MOV Z41,TREFFER  links: Treffer = Zeile und Maske
+2BD   ; DD             AND RAKETE_L,TREFFER
+AB6   ; DE             OR RAKETE_L,Z41  XOR = (a oder m) - (a und m)
+6D6   ; DF             SUB TREFFER,Z41
+07E   ; E0             MOV Z42,HILF     rechts
+2CE   ; E1             AND RAKETE_R,HILF
+AC7   ; E2             OR RAKETE_R,Z42
+6E7   ; E3             SUB HILF,Z42
+90F   ; E4  TgEnde     CMPI #0,FENSTER
+EE8   ; E5             BRZ TgRet
+54A   ; E6             ADDI #4,RAKETE_Y Zeile zurückrechnen, Fenster zu
+F0D   ; E7             EXRL
+AED   ; E8  TgRet      OR HILF,TREFFER  beide Hälften: Treffer <> 0 (Zero-Flag bleibt für den Aufrufer)
+F07   ; E9             RET
+02D   ; EA  TgZ2       MOV Z21,TREFFER  links: Treffer = Zeile und Maske
+2BD   ; EB             AND RAKETE_L,TREFFER
+AB2   ; EC             OR RAKETE_L,Z21  XOR = (a oder m) - (a und m)
+6D2   ; ED             SUB TREFFER,Z21
+03E   ; EE             MOV Z22,HILF     rechts
+2CE   ; EF             AND RAKETE_R,HILF
+AC3   ; F0             OR RAKETE_R,Z22
+6E3   ; F1             SUB HILF,Z22
+CE4   ; F2             GOTO TgEnde
+04D   ; F3  TgZ3       MOV Z31,TREFFER  links: Treffer = Zeile und Maske
+2BD   ; F4             AND RAKETE_L,TREFFER
+AB4   ; F5             OR RAKETE_L,Z31  XOR = (a oder m) - (a und m)
+6D4   ; F6             SUB TREFFER,Z31
+05E   ; F7             MOV Z32,HILF     rechts
+2CE   ; F8             AND RAKETE_R,HILF
+AC5   ; F9             OR RAKETE_R,Z32
+6E5   ; FA             SUB HILF,Z32
+CE4   ; FB             GOTO TgEnde
+F0D   ; FC  TgUp       EXRL             Zeile 5-8: Alienfenster auf
+74A   ; FD             SUBI #4,RAKETE_Y
+11F   ; FE             MOVI #1,FENSTER
+CCE   ; FF             GOTO TgZeile
